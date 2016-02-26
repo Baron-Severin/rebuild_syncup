@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.severin.syncup.MainActivity"
+    tools:showIn="@layout/activity_main"
+    android:id="@+id/content_main_overall"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/grey"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:layout_marginTop="45dp">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@color/orange_light"
+            android:id="@+id/calendar_view"
+            android:layout_marginTop="10dp"
+            android:padding="5dp">
+
+            <CalendarView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/calendarView"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:measureAllChildren="false"
+                android:longClickable="false"
+                android:background="@color/background_light" />
+        </GridLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/orange_light"
+            android:padding="5dp"
+            android:layout_below="@+id/calendar_view">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/scrollView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:baselineAligned="false">
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="@color/background_light"
+                    android:id="@+id/calendar_summary"
+                    android:layout_below="@+id/calendar_view"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:useDefaultMargins="false"
+                    android:layout_marginBottom="5dp"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Time Suggestions"
+                        android:id="@+id/time_suggestions_heading"
+                        android:layout_row="0"
+                        android:layout_column="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_medium"
+                        android:fontFamily="sans-serif-medium"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Most People Available On: "
+                        android:id="@+id/time_suggestions_most_available"
+                        android:layout_row="1"
+                        android:layout_column="0"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_small"
+                        android:fontFamily="sans-serif-medium"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Longest Availability On: "
+                        android:id="@+id/time_suggestions_longest_period"
+                        android:layout_row="2"
+                        android:layout_column="0"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_small"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginTop="5dp" />
+                </GridLayout>
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background_light"
+                    android:id="@+id/gridLayout"
+                    android:useDefaultMargins="false"
+                    android:layout_below="@+id/calendar_summary"
+                    android:layout_centerHorizontal="true"
+                    android:padding="2dp"
+                    android:layout_marginBottom="5dp">
+
+                    <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:text="My Availability"
+                            android:id="@+id/my_availability_heading"
+                            android:layout_row="0"
+                            android:layout_column="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_medium"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center_vertical|left" />
+
+                        <Button
+                            android:textAllCaps="false"
+                            android:layout_width="70dp"
+                            android:layout_height="28dp"
+                            android:text="Save"
+                            android:id="@+id/save_entries_button"
+                            android:background="@color/orange_button"
+                            android:layout_gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_medium"
+                            android:fontFamily="sans-serif-medium"
+                            android:onClick="save_entry"
+                            android:layout_alignParentRight="true" />
+                    </RelativeLayout>
+
+                    <GridLayout
+                        android:id="@+id/spinner_grid_day_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/scrollView"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_row="1"
+                        android:layout_column="0"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="5dp">
+
+                        <TextView
+                            android:layout_width="170dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/day_1"
+                            android:layout_row="0"
+                            android:layout_column="0"
+                            android:text="Select Date"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp"
+                            android:onClick="show_date_picker_dialog"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/from"
+                            android:id="@+id/textView"
+                            android:layout_row="0"
+                            android:layout_column="1"
+                            android:layout_gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_small"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select Begin Time"
+                            android:id="@+id/from_time_1"
+                            android:layout_row="0"
+                            android:layout_column="3"
+                            android:layout_gravity="center"
+                            android:onClick="start_time_picker_dialog"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/until"
+                            android:id="@+id/textView2"
+                            android:layout_row="1"
+                            android:layout_column="1"
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_small"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginBottom="0dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select End Time"
+                            android:id="@+id/until_time_1"
+                            android:layout_row="1"
+                            android:layout_column="3"
+                            android:layout_gravity="center"
+                            android:onClick="end_time_picker_dialog"
+                            />
+
+                    </GridLayout>
+
+                </GridLayout>
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_row="3"
+                    android:layout_column="0"
+                    android:layout_columnSpan="6"
+                    android:id="@+id/saved_availability_layout"
+                    android:background="@color/background_light"
+                    android:useDefaultMargins="false"
+                    android:layout_centerHorizontal="true"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saved Times"
+                        android:id="@+id/textView3"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_medium"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center_vertical|left"
+                        />
+                </GridLayout>
+
+                <!--
+
+                        <TextView
+                            android:layout_width="245dp"
+                            android:layout_height="20dp"
+                            android:text="My Availability"
+                            android:id="@+id/my_availability_heading"
+                            android:layout_row="0"
+                            android:layout_column="0"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_medium"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center_vertical|left" />
+
+                -->
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

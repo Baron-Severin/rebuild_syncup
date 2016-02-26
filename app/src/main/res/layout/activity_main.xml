@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.severin.syncup.MainActivity">
+
+    <!--<android.support.design.widget.AppBarLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:theme="@style/AppTheme.AppBarOverlay">-->
+
+    <android.support.v7.widget.ActionMenuView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@color/orange_light"
+        >
+
+        <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="?attr/actionBarSize"-->
+        <!--android:background="?attr/colorPrimary"-->
+        <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
+
+
+        <Button
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/button_friends"
+            android:id="@+id/toolbar_button_friends"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/orange_light"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_large"
+            android:fontFamily="sans-serif-medium" />
+
+        <Button
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/button_events"
+            android:id="@+id/toolbar_button_events"
+            android:layout_alignParentTop="true"
+            android:background="@color/orange_light"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_large"
+            android:fontFamily="sans-serif-medium" />
+
+        <!--
+                Events 'button' can be a spinner widget instead of another activity.  Add to the spinner every time a new event
+                is created,change spinner default text to currently selected event
+        -->
+
+        <Button
+            android:textAllCaps="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/button_settings"
+            android:id="@+id/toolbar_button_settings"
+            android:layout_alignParentTop="true"
+            android:background="@color/orange_light"
+            android:textColor="@color/black"
+            android:textSize="@dimen/font_size_large"
+            android:fontFamily="sans-serif-medium" />
+
+    </android.support.v7.widget.ActionMenuView>
+
+    <!--</android.support.design.widget.AppBarLayout>-->
+
+    <include layout="@layout/content_main" />
+
+</android.support.design.widget.CoordinatorLayout>
