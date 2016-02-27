@@ -17,6 +17,8 @@
     <string name="saved_times">Saved Times</string>
     <string name="midnight">Midnight</string>
     <string name="noon">Noon</string>
+    <string name="delete_saved_times">Delete Saved Times</string>
+    <string name="delete">Delete</string>
     <color name="orange_light">#fe5f55</color>
     <color name="black">#000000</color>
     <color name="background_light">#ffffff</color>

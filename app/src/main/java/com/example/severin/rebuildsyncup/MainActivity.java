@@ -16,7 +16,7 @@ My Availability: Click on fields to call date/timepicker dialogs DONE
     entries/created widgets recreate on redraw DONE
     delete saved times with spinner IN PROGRESS
 
-Post 1.0:
+Post-Launch:
     ease of use:
         time selection (drag across visualization to define availability)
         less cumbersome deletion method
@@ -24,6 +24,7 @@ Post 1.0:
         use concepts we've been reading about in Google Materials.  Cleaner, more lifelike
     features:
         share event notes as well as times
+    DO NOT FEATURE CREEP.  MPV first, additions later
 
 */
 
