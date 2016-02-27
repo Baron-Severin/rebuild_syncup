@@ -1,13 +1,29 @@
 /*
 
-todo: saving availability saves to xml
-todo: delete availability buttons
+MINIMUM VIABLE PRODUCT:
 
-todo: friends list
+Create event. Invite friends to event.  Each person lists available times.  Times are visualized as
+shown in Photoshop: http://imgur.com/1nJaRLW
 
-todo: networking
+EVENT INFORMATION PAGE:
 
-todo: data visualization
+Visualization: UNSTARTED (calendar placeholder)
+Time Suggestions: UNSTARTED
+My Availability: Click on fields to call date/timepicker dialogs DONE
+    date/timepicker dialogs set TextView text DONE
+    times pushed to ArrayList<HashMap> DONE
+    save button creates widgets within ScrollView DONE
+    entries/created widgets recreate on redraw DONE
+    delete saved times with spinner IN PROGRESS
+
+Post 1.0:
+    ease of use:
+        time selection (drag across visualization to define availability)
+        less cumbersome deletion method
+    appearance:
+        use concepts we've been reading about in Google Materials.  Cleaner, more lifelike
+    features:
+        share event notes as well as times
 
 */
 
@@ -38,20 +54,25 @@ import android.widget.TimePicker;
 import org.joda.time.DateTime;
 
 import java.text.DateFormatSymbols;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    // current_textview and start_vs_end are used when saving and setting text from DatePicker and TimePicker dialogs
+    // current_textview and start_vs_end are used when saving and setting text from DatePicker and
+    // TimePicker dialogs
     static TextView current_textview;
     static String start_vs_end;
 
     // next_saved_entry_row determines the grid placement of saved availability TextViews
     static int next_saved_entry_row = 1;
 
-    // entry_holder retains current value of filled in fields for redraws
-    static HashMap <String, Object> entry_holder = new <String, Object> HashMap();
+    // availability_blocks contains currently saved availabilities, next_availability_block counts
+    // how many entries exist
+    static ArrayList<HashMap<String, Object>> availability_blocks = new ArrayList();
+    static Integer next_availability_block = 0;
 
     // calls to show TimePicker dialog
     public void start_time_picker_dialog(View view) {
@@ -73,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
     // defines fragment that creates TimePicker dialog
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
-
-
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -119,13 +138,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (start_vs_end.equals("start")) {
-                entry_holder.put("start_hour", hour);
-                entry_holder.put("start_minute", minute);
-                entry_holder.put("start_display", display_time);
+                HashMap temporary_hashmap = availability_blocks.get(next_availability_block);
+                temporary_hashmap.put("start_hour", hour);
+                temporary_hashmap.put("start_minute", minute);
+                temporary_hashmap.put("start_display", display_time);
             } else {
-                entry_holder.put("end_hour", hour);
-                entry_holder.put("end_minute", minute);
-                entry_holder.put("end_display", display_time);
+                HashMap temporary_hashmap = availability_blocks.get(next_availability_block);
+                temporary_hashmap.put("end_hour", hour);
+                temporary_hashmap.put("end_minute", minute);
+                temporary_hashmap.put("end_display", display_time);
             }
 
         }
@@ -134,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -153,15 +175,18 @@ public class MainActivity extends AppCompatActivity {
             // Month is 0-11. Some methods access in 0-11 format, some in 1-12. SMH
             month += 1;
 
-            entry_holder.put("year", year);
-            entry_holder.put("month", getMonth(month));
-            entry_holder.put("day_int", day);
+            HashMap temporary_hashmap = availability_blocks.get(next_availability_block);
+            temporary_hashmap.put("year", year);
+            temporary_hashmap.put("month", getMonth(month));
+            temporary_hashmap.put("day_int", day);
+
+            // todo: here
 
             DateTime date_time = new DateTime(year, month, day, 0, 0);
 
             String day_of_week = date_time.dayOfWeek().getAsText();
 
-            entry_holder.put("day_of_week", day_of_week);
+            temporary_hashmap.put("day_of_week", day_of_week);
 
             String temporary_string = day_of_week + ", " + getMonth(month) + " " + day;
             current_textview.setText(temporary_string);
@@ -187,26 +212,47 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // fill in editable fields for redraws
-        if (entry_holder.isEmpty() == false) {
+        if (availability_blocks.isEmpty() == true) {
+            availability_blocks.add(new HashMap<String, Object>());
+//            System.out.println("sevlog it was empty");
+        }
 
-            if (entry_holder.get("day_of_week") != "null") {
+        // fill in editable fields for redraws
+        if (availability_blocks.get(next_availability_block).isEmpty() == false) {
+
+            if (availability_blocks.get(next_availability_block).get("day_of_week") != "null") {
                 current_textview = (TextView) findViewById(R.id.day_1);
 
-                current_textview.setText(entry_holder.get("day_of_week") + ", " + entry_holder.get("month") + " " +
-                        entry_holder.get("day_int"));
+                String temporary_text = availability_blocks.get(next_availability_block).get("day_of_week") + ", " +
+                        availability_blocks.get(next_availability_block).get("month") + " " +
+                        availability_blocks.get(next_availability_block).get("day_int");
+                current_textview.setText(temporary_text);
             }
 
-            if (entry_holder.get("start_display") != null) {
+            if (availability_blocks.get(next_availability_block).get("start_display") != null) {
                 current_textview = (TextView) findViewById(R.id.from_time_1);
 
-                current_textview.setText("" + entry_holder.get("start_display"));
+                current_textview.setText("" + availability_blocks.get(next_availability_block).get("start_display"));
             }
 
-            if (entry_holder.get("end_display") != null) {
+            if (availability_blocks.get(next_availability_block).get("end_display") != null) {
                 current_textview = (TextView) findViewById(R.id.until_time_1);
 
-                current_textview.setText("" + entry_holder.get("end_display"));
+                current_textview.setText("" + availability_blocks.get(next_availability_block).get("end_display"));
+            }
+
+        }
+
+        if (next_availability_block > 0) {
+            for (int i = 0; i < availability_blocks.size() - 1; i++){
+                HashMap temporary_hashmap = availability_blocks.get(i);
+                Object day_of_week = temporary_hashmap.get("day_of_week");
+                Object month = temporary_hashmap.get("month");
+                Object day_int = temporary_hashmap.get("day_int");
+                Object start_display = temporary_hashmap.get("start_display");
+                Object end_display = temporary_hashmap.get("end_display");
+
+                build_availability_button(day_of_week, month, day_int, start_display, end_display);
             }
 
         }
@@ -215,18 +261,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void save_entry(View view) {
 
-        if (entry_holder.get("day_int") != null && entry_holder.get("end_display") != null &&
-                entry_holder.get("start_display") != null) {
-            build_availability_button(entry_holder.get("day_of_week"), entry_holder.get("month"), entry_holder.get("day_int"), entry_holder.get("start_display"), entry_holder.get("end_display"));
+        // gathers entries for current time/date selections
+        Object current_day_int = availability_blocks.get(next_availability_block).get("day_int");
+        Object current_end_display = availability_blocks.get(next_availability_block).get("end_display");
+        Object current_start_display = availability_blocks.get(next_availability_block).get("start_display");
+
+        if (current_day_int != null && current_end_display != null && current_start_display != null) {
+
+            build_availability_button(availability_blocks.get(next_availability_block).get("day_of_week"),
+                    availability_blocks.get(next_availability_block).get("month"),
+                    availability_blocks.get(next_availability_block).get("day_int"),
+                    availability_blocks.get(next_availability_block).get("start_display"),
+                    availability_blocks.get(next_availability_block).get("end_display"));
 
             // store and delete current entries
-            //push_entries_to_storage(entry_holder);
+            //push_entries_to_storage(entry_field_data_holder);
             // todo: maybe this method should do something?
 
-            System.out.println(entry_holder);
+            availability_blocks.add(new HashMap<String, Object>());
+            next_availability_block += 1;
+            System.out.println("sevlog" + availability_blocks);
             // todo: add sound (or otherfeedback) to save
+
+            set_entry_fields_to_default();
         } else {
-            //todo: "put some stuff in the TextEdits to save, moron" message
+            //todo: display "hey idiot, put some stuff in the fields to save" message
         }
     }
 
@@ -241,16 +300,17 @@ public class MainActivity extends AppCompatActivity {
         GridLayout.Spec row_spec = GridLayout.spec(next_saved_entry_row);
         GridLayout.Spec column_spec = GridLayout.spec(0);
 
-        my_textview.setLayoutParams(new ViewGroup.LayoutParams(GridLayout.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.MATCH_PARENT));
+        my_textview.setLayoutParams(new ViewGroup.LayoutParams(GridLayout.LayoutParams.MATCH_PARENT,
+                GridLayout.LayoutParams.MATCH_PARENT));
         GridLayout.LayoutParams params;
 
         params = new GridLayout.LayoutParams(row_spec, column_spec);
         params.setMargins(0, 5, 0, 5);
 
         my_textview.setLayoutParams(params);
-        my_textview.setText("Available " + day_of_week + " " + month +
-                " " + day_int + ", from " + start_display +
-                " until " + end_display);
+        String temporary_string = "Available " + day_of_week + " " + month + " " + day_int + ", from " +
+                start_display + " until " + end_display;
+        my_textview.setText(temporary_string);
 
         // add textview
         my_layout.addView(my_textview);
@@ -275,6 +335,20 @@ public class MainActivity extends AppCompatActivity {
         my_layout.addView(my_button);
 
         next_saved_entry_row += 1;
+
+      //  availability_object.next_availability_block += 1;
+    }
+
+    public void set_entry_fields_to_default() {
+        current_textview = (TextView) findViewById(R.id.day_1);
+        current_textview.setText(R.string.select_date);
+
+        current_textview = (TextView) findViewById(R.id.from_time_1);
+        current_textview.setText(R.string.from);
+
+        current_textview = (TextView) findViewById(R.id.until_time_1);
+        current_textview.setText(R.string.until);
+
     }
 
     public static int dp_to_px (Context context, float dp) {
@@ -308,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     /*
-        entry_holder
+        entry_field_data_holder
             day_int
             day_of_week
             month
