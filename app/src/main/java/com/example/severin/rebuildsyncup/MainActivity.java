@@ -18,243 +18,40 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.renderscript.Sampler;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
-import android.util.Pair;
 import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridLayout;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import org.joda.time.DateTime;
-import org.w3c.dom.Text;
 
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
+    // current_textview and start_vs_end are used when saving and setting text from DatePicker and TimePicker dialogs
     static TextView current_textview;
     static String start_vs_end;
+
+    // next_saved_entry_row determines the grid placement of saved availability TextViews
     static int next_saved_entry_row = 1;
 
     // entry_holder retains current value of filled in fields for redraws
-    static HashMap entry_holder = new HashMap();
-
-    // Each index in current_availabilities is one saved availability block for the currently selected event
-    static List<HashMap> current_availabilities = new List<HashMap>() {
-        @Override
-        public void add(int location, HashMap object) {
-
-        }
-
-        @Override
-        public boolean add(HashMap object) {
-            return false;
-        }
-
-        @Override
-        public boolean addAll(int location, Collection<? extends HashMap> collection) {
-            return false;
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends HashMap> collection) {
-            return false;
-        }
-
-        @Override
-        public void clear() {
-
-        }
-
-        @Override
-        public boolean contains(Object object) {
-            return false;
-        }
-
-        @Override
-        public boolean containsAll(Collection<?> collection) {
-            return false;
-        }
-
-        @Override
-        public HashMap get(int location) {
-            return null;
-        }
-
-        @Override
-        public int indexOf(Object object) {
-            return 0;
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
-
-        @NonNull
-        @Override
-        public Iterator<HashMap> iterator() {
-            return null;
-        }
-
-        @Override
-        public int lastIndexOf(Object object) {
-            return 0;
-        }
-
-        @Override
-        public ListIterator<HashMap> listIterator() {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public ListIterator<HashMap> listIterator(int location) {
-            return null;
-        }
-
-        @Override
-        public HashMap remove(int location) {
-            return null;
-        }
-
-        @Override
-        public boolean remove(Object object) {
-            return false;
-        }
-
-        @Override
-        public boolean removeAll(Collection<?> collection) {
-            return false;
-        }
-
-        @Override
-        public boolean retainAll(Collection<?> collection) {
-            return false;
-        }
-
-        @Override
-        public HashMap set(int location, HashMap object) {
-            return null;
-        }
-
-        @Override
-        public int size() {
-            return 0;
-        }
-
-        @NonNull
-        @Override
-        public List<HashMap> subList(int start, int end) {
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Object[] toArray() {
-            return new Object[0];
-        }
-
-        @NonNull
-        @Override
-        public <T> T[] toArray(T[] array) {
-            return null;
-        }
-    };
-
-    // define fragment that creates TimePicker dialog
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return new TimePickerDialog(getActivity(), this, 12, 0, DateFormat.is24HourFormat(getActivity()));
-        }
-
-        public void onTimeSet(TimePicker view, int hour, int minute) {
-            String Hour;
-            // rounds minute down to the nearest 5
-            String display_time;
-            minute = Math.round(minute / 5) * 5;
-            if (hour > 12) {
-                Hour = String.valueOf(hour - 12);
-            } else {
-                Hour = String.valueOf(hour);
-            }
-            String Minute = String.valueOf(minute);
-            if (Hour == "0") {
-                Hour = "00";
-            }
-            if (Minute == "0") {
-                Minute = "00";
-            }
-
-            if (hour == 0 && minute == 0) {
-                current_textview.setText("Midnight");
-                display_time = "Midnight";
-
-
-            } else if (hour < 12) {
-                current_textview.setText(Hour + ":" + Minute + " AM");
-                display_time = Hour + ":" + Minute + " AM";
-            } else if (hour == 12 && minute == 0) {
-                current_textview.setText("Noon");
-                display_time = "Noon";
-            } else {
-                current_textview.setText(Hour + ":" + Minute + " PM");
-                display_time = Hour + ":" + Minute + " PM";
-            }
-
-            if (start_vs_end == "start") {
-                entry_holder.put("start_hour", hour);
-                entry_holder.put("start_minute", minute);
-                entry_holder.put("start_display", display_time);
-            } else {
-                entry_holder.put("end_hour", hour);
-                entry_holder.put("end_minute", minute);
-                entry_holder.put("end_display", display_time);
-            }
-
-
-        }
-
-    }
+    static HashMap <String, Object> entry_holder = new <String, Object> HashMap();
 
     // calls to show TimePicker dialog
     public void start_time_picker_dialog(View view) {
@@ -273,8 +70,67 @@ public class MainActivity extends AppCompatActivity {
         start_vs_end = "end";
     }
 
+    // defines fragment that creates TimePicker dialog
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
 
 
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return new TimePickerDialog(getActivity(), this, 12, 0, DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hour, int minute) {
+            String Hour;
+            // rounds minute down to the nearest 5
+            String display_time;
+            minute = Math.round(minute / 5) * 5;
+            if (hour > 12) {
+                Hour = String.valueOf(hour - 12);
+            } else {
+                Hour = String.valueOf(hour);
+            }
+
+            // rules for making display text more human readable
+            String Minute = String.valueOf(minute);
+            if (Hour.equals("0")) {
+                Hour = "00";
+            }
+            if (Minute.equals("0")) {
+                Minute = "00";
+            }
+
+            if (hour == 0 && minute == 0) {
+                current_textview.setText(R.string.midnight);
+                display_time = "Midnight";
+
+            } else if (hour < 12) {
+                String temporary_text = Hour + ":" + Minute + " AM";
+                current_textview.setText(temporary_text);
+                display_time = temporary_text;
+            } else if (hour == 12 && minute == 0) {
+                current_textview.setText(R.string.noon);
+                display_time = "Noon";
+            } else {
+                String temporary_text = Hour + ":" + Minute + " PM";
+                current_textview.setText(temporary_text);
+                display_time = Hour + ":" + Minute + " PM";
+            }
+
+            if (start_vs_end.equals("start")) {
+                entry_holder.put("start_hour", hour);
+                entry_holder.put("start_minute", minute);
+                entry_holder.put("start_display", display_time);
+            } else {
+                entry_holder.put("end_hour", hour);
+                entry_holder.put("end_minute", minute);
+                entry_holder.put("end_display", display_time);
+            }
+
+        }
+
+    }
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
@@ -307,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
             entry_holder.put("day_of_week", day_of_week);
 
-            current_textview.setText(day_of_week + ", " + getMonth(month) + " " + day);
+            String temporary_string = day_of_week + ", " + getMonth(month) + " " + day;
+            current_textview.setText(temporary_string);
 
         }
 
@@ -330,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        // fill in editable fields for redraws
         if (entry_holder.isEmpty() == false) {
 
             if (entry_holder.get("day_of_week") != "null") {
@@ -355,31 +213,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void save_entry(View view) {
 
         if (entry_holder.get("day_int") != null && entry_holder.get("end_display") != null &&
@@ -387,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
             build_availability_button(entry_holder.get("day_of_week"), entry_holder.get("month"), entry_holder.get("day_int"), entry_holder.get("start_display"), entry_holder.get("end_display"));
 
             // store and delete current entries
-            push_entries_to_storage(entry_holder);
+            //push_entries_to_storage(entry_holder);
+            // todo: maybe this method should do something?
 
             System.out.println(entry_holder);
             // todo: add sound (or otherfeedback) to save
@@ -408,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         GridLayout.Spec column_spec = GridLayout.spec(0);
 
         my_textview.setLayoutParams(new ViewGroup.LayoutParams(GridLayout.LayoutParams.MATCH_PARENT, GridLayout.LayoutParams.MATCH_PARENT));
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams(row_spec, column_spec);
+        GridLayout.LayoutParams params;
 
         params = new GridLayout.LayoutParams(row_spec, column_spec);
         params.setMargins(0, 5, 0, 5);
@@ -429,11 +263,10 @@ public class MainActivity extends AppCompatActivity {
         float my_float = 28f;
         params.height = dp_to_px(this.getApplicationContext(), my_float);
 
-
-        my_button.setBackgroundColor((getResources().getColor(R.color.orange_button)));
+        my_button.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.orange_button));
         my_button.setText("Delete");
         my_button.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        my_button.setTextColor(getResources().getColor(R.color.black));
+        my_button.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
         my_button.setAllCaps(false);
         my_button.setPadding(0, 0, 0, 0);
 
@@ -449,14 +282,26 @@ public class MainActivity extends AppCompatActivity {
         return  Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics));
     }
 
-    public void push_entries_to_storage (HashMap entry_holder) {
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
-    // Random logging code
-    public void random_logging_code (View view) {
-        System.out.println(entry_holder);
-        System.out.println(entry_holder.get("year"));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
