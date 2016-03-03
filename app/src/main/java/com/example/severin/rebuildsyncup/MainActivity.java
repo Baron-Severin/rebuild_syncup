@@ -46,9 +46,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.GridLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -213,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        populate_delete_spinner();
+
         if (availability_blocks.isEmpty() == true) {
             availability_blocks.add(new HashMap<String, Object>());
 //            System.out.println("sevlog it was empty");
@@ -244,6 +248,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        rebuild_availability_buttons();
+
+    }
+
+    public void rebuild_availability_buttons() {
         if (next_availability_block > 0) {
             for (int i = 0; i < availability_blocks.size() - 1; i++){
                 HashMap temporary_hashmap = availability_blocks.get(i);
@@ -257,7 +266,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
     }
 
     public void save_entry(View view) {
@@ -285,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
             // todo: add sound (or otherfeedback) to save
 
             set_entry_fields_to_default();
+            populate_delete_spinner();
         } else {
             //todo: display "hey idiot, put some stuff in the fields to save" message
         }
@@ -304,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
         my_textview.setLayoutParams(new ViewGroup.LayoutParams(GridLayout.LayoutParams.MATCH_PARENT,
                 GridLayout.LayoutParams.MATCH_PARENT));
         GridLayout.LayoutParams params;
+        my_textview.setTypeface(null, Typeface.BOLD);
 
         params = new GridLayout.LayoutParams(row_spec, column_spec);
         params.setMargins(0, 5, 0, 5);
@@ -317,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
         my_layout.addView(my_textview);
         next_saved_entry_row += 1;
 
+        /*
         // format button
         row_spec = GridLayout.spec(next_saved_entry_row);
 
@@ -336,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
         my_layout.addView(my_button);
 
         next_saved_entry_row += 1;
+*/
 
       //  availability_object.next_availability_block += 1;
     }
@@ -351,6 +363,60 @@ public class MainActivity extends AppCompatActivity {
         current_textview.setText(R.string.until);
 
     }
+
+public void populate_delete_spinner() {
+    Spinner spinner = (Spinner) findViewById(R.id.spinner_delete_saved_times);
+
+    ArrayList<String> spinner_contents = create_spinner_contents();
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinner_contents);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+}
+
+    public ArrayList<String> create_spinner_contents() {
+
+        ArrayList<String> spinner_contents = new ArrayList<>();
+        for (int i = 0; i < availability_blocks.size()-1; i++) {
+            String temporary_string = availability_blocks.get(i).get("day_of_week") + " " +
+                    availability_blocks.get(i).get("month") + " " +
+                    availability_blocks.get(i).get("day_int") + ", from " +
+                    availability_blocks.get(i).get("start_display") + " until " +
+                    availability_blocks.get(i).get("end_display");
+            spinner_contents.add(temporary_string);
+        }
+
+        return spinner_contents;
+
+    }
+
+    public void delete_spinner_entry(View view) {
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_delete_saved_times);
+        int spinner_selected = spinner.getSelectedItemPosition();
+
+        ArrayList<String> spinner_contents = create_spinner_contents();
+
+        for (int i = 0; i < availability_blocks.size()-1; i++){
+            String temporary_string = availability_blocks.get(i).get("day_of_week") + " " +
+                    availability_blocks.get(i).get("month") + " " +
+                    availability_blocks.get(i).get("day_int") + ", from " +
+                    availability_blocks.get(i).get("start_display") + " until " +
+                    availability_blocks.get(i).get("end_display");
+
+            if (spinner_contents.get(spinner_selected).equals(temporary_string)) {
+                availability_blocks.remove(i);
+                next_availability_block -= 1;
+            }
+        }
+        GridLayout temporary_layout = (GridLayout) findViewById(R.id.saved_availability_layout);
+        temporary_layout.removeAllViews();
+        rebuild_availability_buttons();
+        populate_delete_spinner();
+    }
+
+
 
     public static int dp_to_px (Context context, float dp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();

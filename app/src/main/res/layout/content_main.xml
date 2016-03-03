@@ -225,7 +225,6 @@
                 <GridLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/saved_availability_layout"
                     android:background="@color/background_light"
                     android:useDefaultMargins="false"
                     android:padding="2dp">
@@ -239,10 +238,22 @@
                         android:textSize="@dimen/font_size_medium"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
                         android:layout_gravity="center_vertical|start"
                         />
                 </GridLayout>
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background_light"
+                        android:useDefaultMargins="false"
+                        android:text="@string/saved_times"
+                        android:id="@+id/saved_availability_layout"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/font_size_medium"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="5dp"
+                        android:layout_gravity="center_vertical|start"
+                        />
 
                 <GridLayout
                     android:layout_width="match_parent"
@@ -251,7 +262,6 @@
                     android:id="@+id/gridLayout3"
                     android:useDefaultMargins="false"
                     android:padding="2dp"
-                    android:layout_marginTop="8dp"
                     >
 
                     <RelativeLayout
@@ -282,7 +292,7 @@
                             android:textColor="@color/black"
                             android:textSize="@dimen/font_size_medium"
                             android:fontFamily="sans-serif-medium"
-                            android:onClick="save_entry"
+                            android:onClick="delete_spinner_entry"
                             android:layout_alignParentRight="true"
                             android:layout_alignParentEnd="true" />
                     </RelativeLayout>

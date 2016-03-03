@@ -6,25 +6,12 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.severin.syncup.MainActivity">
 
-    <!--<android.support.design.widget.AppBarLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:theme="@style/AppTheme.AppBarOverlay">-->
-
     <android.support.v7.widget.ActionMenuView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
         android:background="@color/orange_light"
         >
-
-        <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--android:background="?attr/colorPrimary"-->
-        <!--app:popupTheme="@style/AppTheme.PopupOverlay" />-->
-
 
         <Button
             android:textAllCaps="false"
@@ -54,11 +41,6 @@
             android:textSize="@dimen/font_size_large"
             android:fontFamily="sans-serif-medium" />
 
-        <!--
-                Events 'button' can be a spinner widget instead of another activity.  Add to the spinner every time a new event
-                is created,change spinner default text to currently selected event
-        -->
-
         <Button
             android:textAllCaps="false"
             android:layout_width="wrap_content"
@@ -74,7 +56,6 @@
 
     </android.support.v7.widget.ActionMenuView>
 
-    <!--</android.support.design.widget.AppBarLayout>-->
 
     <include layout="@layout/content_main" />
 
