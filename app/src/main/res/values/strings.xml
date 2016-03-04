@@ -19,6 +19,11 @@
     <string name="noon">Noon</string>
     <string name="delete_saved_times">Delete Saved Times</string>
     <string name="delete">Delete</string>
+    <string name="events_heading">Events</string>
+    <string name="create_new_event_button">Create New Event</string>
+    <string name="select_default_event_start_time">Select Default Start Time</string>
+    <string name="name_your_event">Name Your Event</string>
+    <string name="saved_events">Saved Events</string>
     <color name="orange_light">#fe5f55</color>
     <color name="black">#000000</color>
     <color name="background_light">#ffffff</color>
